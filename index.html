@@ -578,9 +578,8 @@ nav {
 .stat-lbl { color:var(--grey);font-size:13px;line-height:1.5; }
 
 /* REVEAL */
-.reveal { opacity:1;transform:translateY(0);transition:all 0.7s ease; }
-.reveal.animate { opacity:0;transform:translateY(28px); }
-.reveal.animate.visible { opacity:1;transform:translateY(0); }
+.reveal { opacity:0;transform:translateY(28px);transition:all 0.7s ease; }
+.reveal.visible { opacity:1;transform:translateY(0); }
 
 /* FOOTER */
 footer {
@@ -635,8 +634,8 @@ footer {
   <p class="hero-p">Your bank tells you spent £67 at Tesco. SpendWise tells you exactly what you bought, alerts you before return deadlines expire and answers any question about your spending instantly with AI.</p>
 
   <div class="hero-ctas">
-    <button class="cta-main" onclick="window.open("https://tally.so/r/xXZd05", "_blank")">Join the Waitlist →</button>
-    <button class="cta-tester" onclick="window.open("https://tally.so/r/Ek0Pv4", "_blank")">Become a Beta Tester 🧪</button>
+    <button class="cta-main" onclick="scrollTo('#waitlist')">Join the Waitlist →</button>
+    <button class="cta-tester" onclick="scrollTo('#tester')">Become a Beta Tester 🧪</button>
   </div>
   <p class="hero-note">Free to join · No spam · One email when we launch</p>
 </section>
@@ -895,7 +894,7 @@ footer {
           <option>Mostly online shopping</option>
           <option>Mix of both</option>
         </select>
-        <button class="btn-tester-submit" onclick="window.open("https://tally.so/r/Ek0Pv4", "_blank")">
+        <button class="btn-tester-submit" onclick="joinAsTester()">
           Apply to Be a Beta Tester →
         </button>
       </div>
@@ -917,7 +916,7 @@ footer {
     <p>Join the waitlist and we'll send you one email the moment SpendWise hits Google Play. That's it.</p>
     <div class="wl-form">
       <input type="email" class="form-input" placeholder="your@email.com" id="wl-email" />
-      <button class="btn-primary" style="padding:15px 24px;border-radius:14px;font-size:15px;white-space:nowrap" onclick="window.open("https://tally.so/r/xXZd05", "_blank")">Notify Me →</button>
+      <button class="btn-primary" style="padding:15px 24px;border-radius:14px;font-size:15px;white-space:nowrap" onclick="joinWaitlist()">Notify Me →</button>
     </div>
     <div class="wl-success" id="wl-success">✓ You're on the list. We'll email you the moment SpendWise launches.</div>
     <p class="wl-note">No spam. One email only. Unsubscribe anytime.</p>
@@ -945,14 +944,14 @@ function scrollTo(selector) {
   document.querySelector(selector).scrollIntoView({ behavior: 'smooth' });
 }
 
-function window.open("https://tally.so/r/xXZd05", "_blank") {
+function joinWaitlist() {
   const email = document.getElementById('wl-email').value;
   if (!email || !email.includes('@')) {
     document.getElementById('wl-email').style.borderColor = '#ff6b6b';
     setTimeout(() => document.getElementById('wl-email').style.borderColor = '', 2000);
     return;
   }
-  fetch('https://formsubmit.co/ajax/05dc43c5b6335b9979ed99bd2e830b84', {
+  fetch('https://formsubmit.co/ajax/reach.spendwise@gmail.com', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify({ email, subject: 'SpendWise Waitlist', type: 'WAITLIST' })
@@ -961,7 +960,7 @@ function window.open("https://tally.so/r/xXZd05", "_blank") {
   document.getElementById('wl-success').style.display = 'block';
 }
 
-function window.open("https://tally.so/r/Ek0Pv4", "_blank") {
+function joinAsTester() {
   const name = document.getElementById('tester-name').value;
   const email = document.getElementById('tester-email').value;
   const device = document.getElementById('tester-device').value;
@@ -970,7 +969,7 @@ function window.open("https://tally.so/r/Ek0Pv4", "_blank") {
     alert('Please fill in all fields to apply as a tester.');
     return;
   }
-  fetch('https://formsubmit.co/ajax/05dc43c5b6335b9979ed99bd2e830b84', {
+  fetch('https://formsubmit.co/ajax/reach.spendwise@gmail.com', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify({
@@ -989,7 +988,10 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// No inline form elements needed - Tally handles everything
+// Enter key on waitlist
+document.getElementById('wl-email').addEventListener('keydown', e => {
+  if (e.key === 'Enter') joinWaitlist();
+});
 </script>
 </body>
 </html>
